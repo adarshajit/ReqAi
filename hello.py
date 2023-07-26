@@ -1,53 +1,64 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 from jira import JIRA
-import getpass
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
 
-"""
-USERNAME: 
-adarsh.ajit@people10.com
+username = os.environ.get("EMAIL_ID")
+password = os.environ.get("API_TOKEN")
+jira_instance = os.environ.get("JIRA_INSTANCE")
 
-PASSWORD/ API TOKEN: ATATT3xFfGF0qn4aCFi6g9dN087XY8LlOk0U3gviHZYuSqnl8CCpztRTiuxsPvXIk-xG9Fwb0WBbng8oJmqZdpBBHXPHH4yBtfqEb6GpUhvl5QvY8lUWvi2y5Qo2osQWqmIPGoQP84MJpPzmJymdxHLzQF27JeS7w3O2bR80x8_D8-Xq1p49tJg=746DD57E
-"""
-
-def connect_jira():
-    print('Connecting to Jira...')
-    # username will be your registered email id with your altassian account
-    username = input('Jira username: ')
-    # password will be your API token
-    pwd = getpass.getpass('Jira password: ')
-    try:
-        jira = JIRA('https://people10-adarshajit.atlassian.net', basic_auth=(username, pwd))
-
-        project_key = 'SCRUM'
-        summary = 'TESTING TESTING, This is a test'  
-        description = 'Issue Description' 
-        issue_type = {'name': 'Bug'}  
-
-
-        if jira.session():
-            print("The user is authenticated successfully")
-
-            # fetch issue details
-            issue = jira.issue("SCRUM-1")
-
-            print(f"Issue Key: {issue.key}")
-            print(f"Summary: {issue.fields.summary}")
-            print(f"Description: {issue.fields.description}")
-
-            # Create an issue
-            new_issue = jira.create_issue(project=project_key, summary=summary, description=description, issuetype=issue_type)
-
-            print(f"New issue created with key: {new_issue.key}")
-
-        else:
-            print("Error in authenticating user!")
-              
-    except Exception as e:
-        print('Error connecting to Jira!\n', e)
+jira = JIRA(jira_instance, basic_auth=(username, password))
 
 @app.route("/")
 def hello_world():
-    connect_jira()
     return "<h1>Hello, World!</h1>"
+
+
+@app.route("/tickets", methods = ["GET"])
+def get_all_tickets():
+    jql_query = 'project = SCRUM'
+    issues = jira.search_issues(jql_query)
+
+    tickets = []
+    for issue in issues:
+        ticket = {
+            "key": issue.key,
+            "summary": issue.fields.summary,
+            "description": issue.fields.description
+        }
+
+        tickets.append(ticket)
+    
+    return jsonify(tickets)
+    
+@app.route("/ticket/<ticket_id>", methods = ["GET"])
+def get_ticket(ticket_id):
+    issue = jira.issue(str(ticket_id))
+
+    ticket_details = {
+        "key": issue.key,
+        "summary": issue.fields.summary,
+        "description": issue.fields.description
+    }
+
+    return jsonify(ticket_details)
+
+@app.route("/ticket/create", methods = ["POST"])
+def create_ticket():
+
+    body = request.get_json()
+
+    ticket_data = {
+        "project": body.get("project"),
+        "summary": body.get("summary"),
+        "description": body.get("description"),
+        "issuetype": {"name": body.get("issuetype")}
+    }
+
+    new_issue = jira.create_issue(fields=ticket_data)
+
+    return f"New issue created with key: {new_issue.key}"
