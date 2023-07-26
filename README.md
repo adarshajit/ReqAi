@@ -66,4 +66,10 @@ Then the command will look something like this:
 flask --app hello run
 ```
 
+Exit virtual environment
+
+```
+deactivate
+```
+
 For further info refer the official docs: https://flask.palletsprojects.com/en/2.3.x/
