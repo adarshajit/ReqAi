@@ -30,7 +30,9 @@ def createJira():
   if "requirements" in data:
             prompt = data["requirements"]
   prompt_dict = {"prompt": {"text": prompt}}
-  
+  if "fontStyle" in data:
+            model_name = data["fontStyle"]
+  prompt_dict = {"prompt": {"text": prompt}}
   headers = {
   "Content-Type": "application/json",
   "Accept": "application/json",
@@ -38,8 +40,9 @@ def createJira():
  
  
   
-  model_name = "text-bison@001"
-  url = "https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText?key="+key
+  
+  url = "https://generativelanguage.googleapis.com/v1beta2/models/{}:generateText?key=".format(model_name)
+  url += key
   
   response = requests.post(url, headers=headers, data=json.dumps(prompt_dict))
 
