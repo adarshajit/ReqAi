@@ -25,6 +25,7 @@ app = Flask(__name__)
 def createJira():
   """Hit the PaLM API and return the generated text."""
   key = os.environ.get("PALM_API_KEY")
+  url_formation = os.environ.get("URL")
   if request.is_json:
         data = request.get_json()
   if "requirements" in data:
@@ -41,7 +42,7 @@ def createJira():
  
   
   
-  url = "https://generativelanguage.googleapis.com/v1beta2/models/{}:generateText?key=".format(model_name)
+  url = url_formation+"{}:generateText?key=".format(model_name)
   url += key
   
   response = requests.post(url, headers=headers, data=json.dumps(prompt_dict))
