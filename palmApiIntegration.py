@@ -5,6 +5,7 @@ import requests
 import google.ai.generativelanguage as glm
 import google.generativeai as palm
 import os
+import json
 
 from google.generativeai.client import get_default_text_client
 from google.generativeai.types import text_types
@@ -22,43 +23,33 @@ app = Flask(__name__)
 # Route to count characters in a string
 @app.route('/api/createJira', methods=['POST'])
 def createJira():
-    palm.configure(api_key=os.environ["PALM_API_KEY"])
-    # Replace with the actual URL provided by the "Palm" API documentation
-    api_url = 'https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText'
+  """Hit the PaLM API and return the generated text."""
+  key = os.environ.get("PALM_API_KEY")
+  if request.is_json:
+        data = request.get_json()
+  if "requirements" in data:
+            prompt = data["requirements"]
+  prompt_dict = {"prompt": {"text": prompt}}
+  
+  headers = {
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  }
+ 
+ 
+  
+  model_name = "text-bison@001"
+  url = "https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText?key="+key
+  
+  response = requests.post(url, headers=headers, data=json.dumps(prompt_dict))
 
-    # Replace with your API key or any required authentication
-    headers = {
-        'Content-Type': 'application/json'
-    }
+  if response.status_code == 200:
+    json_output = response.json()["candidates"][0]["output"]
+    
+    return json_output
+  else:
+    return None
 
-    # Replace with your desired prompt for text generation
-    prompt = "Once upon a time, there was a dragon. It lived in a"
-
-    # Replace with any other required parameters according to the API documentation
-    data = {
-        'prompt': prompt,
-        'max_tokens': 100,
-        'temperature': 0.7,
-    }
-
-    try:
-        # Send the POST request to the "Palm" API
-        response = requests.post(api_url, headers=headers, json=data)
-
-        # Handle the response
-        if response.status_code == 200:
-            # Successful request, process the generated text
-            generated_text = response.json().get('generated_text')
-            print("Generated Text:")
-            print(generated_text)
-        else:
-            # Request failed, print the error message
-            print("Request failed with status code: {response.status_code}")
-            print(response.json())
-
-    except requests.exceptions.RequestException as e:
-        # Handle exceptions (e.g., connection error, timeout, etc.)
-        print("Error occurred:", e)
 
 if __name__ == '__main__':
     app.run(debug=True)
