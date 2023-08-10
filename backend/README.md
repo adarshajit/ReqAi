@@ -31,7 +31,7 @@ git clone git@github.com:adarshajit/ReqAi.git
 Go to project folder
 
 ```
-cd ReqAi
+cd ReqAi/backend
 ```
 
 Install virtual environment
