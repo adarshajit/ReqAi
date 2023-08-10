@@ -1,4 +1,4 @@
-# ReqAi
+# ReqAi Backend
 
 ## How to setup project
 
