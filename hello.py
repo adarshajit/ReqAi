@@ -1,11 +1,16 @@
 from flask import Flask, jsonify, request
 from jira import JIRA
 from dotenv import load_dotenv
+from flask_cors import CORS
+import PyPDF2
+from io import BytesIO
 import os
 
 load_dotenv()
 
 app = Flask(__name__)
+
+CORS(app)
 
 username = os.environ.get("EMAIL_ID")
 password = os.environ.get("API_TOKEN")
@@ -62,3 +67,22 @@ def create_ticket():
     new_issue = jira.create_issue(fields=ticket_data)
 
     return f"New issue created with key: {new_issue.key}"
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    pdf_file = request.files['pdf_file']
+    pdf_content = pdf_file.read()
+    pdf_text = extract_text_from_pdf(pdf_content)
+    
+    print(pdf_text)
+    return {"message": "File successfully uploaded", "data": pdf_text }
+
+def extract_text_from_pdf(pdf_content):
+    pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_content))
+    pdf_text = ''
+    
+    for page_num in range(len(pdf_reader.pages)):
+        page = pdf_reader.pages[page_num]
+        pdf_text += page.extract_text()
+    
+    return pdf_text
