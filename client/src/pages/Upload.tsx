@@ -1,8 +1,11 @@
 import { useState, FC, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
+import Spinner from '../components/Spinner';
+import UploadImage from '../assets/upload.svg';
 
 const Upload: FC = () => {
   const [file, setFile] = useState<File | string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
@@ -20,6 +23,7 @@ const Upload: FC = () => {
     formData.append('pdf_file', file);
 
     try {
+      setLoading(true);
       await axios.post('http://localhost:5000/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -27,16 +31,27 @@ const Upload: FC = () => {
       });
     } catch (error) {
       console.error('Error uploading file:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (loading) return <Spinner />;
+
   return (
     <>
-      <h1>Upload Business Requirement Document</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="file" onChange={handleChange} name="pdf_file" />
-        <button type="submit">Upload</button>
-      </form>
+      <div className="hero min-h-screen">
+        <div className="hero-content text-center flex flex-col">
+          <img src={UploadImage} width={200} />
+          <h1 className="text-3xl font-bold">Upload Business Requirement Document</h1>
+          <form onSubmit={handleSubmit}>
+            <input type="file" onChange={handleChange} name="pdf_file" required />
+            <button className="btn btn-primary" type="submit">
+              Upload
+            </button>
+          </form>
+        </div>
+      </div>
     </>
   );
 };
