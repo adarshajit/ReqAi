@@ -1,9 +1,12 @@
 from flask import Flask, jsonify, request
-from jira import JIRA
 from dotenv import load_dotenv
+from jira import JIRA
 from flask_cors import CORS
-import PyPDF2
-from io import BytesIO
+from .utils.extract_text_from_pdf import extract_text_from_pdf
+from .utils.generate_diagram import generate_diagram
+from .utils.serialize import serialize_attachment, serialize_comment
+
+
 import os
 
 load_dotenv()
@@ -26,20 +29,7 @@ sequenceDiagram
     John-->>Alice: Great!
     Alice-)John: See you later!
 """
-    return mermaid_chart(mermaid_code)
-
-def serialize_comment(comment):
-    return {
-        "author": comment.author.displayName,
-        "created": comment.created,
-        "body": comment.body
-    }
-
-def serialize_attachment(attachment):
-    return {
-        "filename": attachment.filename,
-        "url": attachment.content,
-    }
+    return generate_diagram(mermaid_code)
 
 
 @app.route("/tickets", methods = ["GET"])
@@ -108,22 +98,3 @@ def upload_file():
     
     print(pdf_text)
     return {"message": "File successfully uploaded", "data": pdf_text }
-
-def extract_text_from_pdf(pdf_content):
-    pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_content))
-    pdf_text = ''
-    
-    for page_num in range(len(pdf_reader.pages)):
-        page = pdf_reader.pages[page_num]
-        pdf_text += page.extract_text()
-    
-    return pdf_text
-
-def mermaid_chart(mindmap_code):
-    html_code = f"""
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <div class="mermaid">{mindmap_code}</div>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <script>mermaid.initialize({{startOnLoad:true}});</script>
-    """
-    return html_code
