@@ -1,0 +1,13 @@
+flask==2.3.2
+dotenv==16.2.0
+jira==3.5.2
+flask-cors==4.0.0
+requests==2.27.1
+google-ai-generativelanguage==1.7.1
+google-generativeai==1.6.1
+os==3.10.0
+json==3.8.2
+google-generativeai.client==1.6.1
+google-generativeai.types.text_types==1.7.1
+google-generativeai.types.model_types==1.6.1
+google-generativeai.types.safety_types==1.6.1
