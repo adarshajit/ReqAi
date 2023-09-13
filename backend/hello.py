@@ -5,14 +5,10 @@ from flask_cors import CORS
 from .utils.extract_text_from_pdf import extract_text_from_pdf
 from .utils.generate_diagram import generate_diagram
 from .utils.serialize import serialize_attachment, serialize_comment
-
-
 import os
 
 load_dotenv()
-
 app = Flask(__name__)
-
 CORS(app)
 
 username = os.environ.get("EMAIL_ID")
@@ -30,7 +26,6 @@ sequenceDiagram
     Alice-)John: See you later!
 """
     return generate_diagram(mermaid_code)
-
 
 @app.route("/tickets", methods = ["GET"])
 def get_all_tickets():
@@ -89,6 +84,27 @@ def create_ticket():
     new_issue = jira.create_issue(fields=ticket_data)
 
     return f"New issue created with key: {new_issue.key}"
+
+@app.route("/ticket/update/<issue_key>", methods=["PUT"])
+def update_ticket(issue_key):
+    body = request.get_json()
+
+    ticket_data = {
+        "summary": body.get("summary"),
+        "description": body.get("description"),
+    }
+
+    issue = jira.issue(issue_key)
+    issue.update(fields=ticket_data)
+
+    return f"Issue {issue_key} updated successfully"
+
+@app.route("/ticket/delete/<issue_key>", methods=["DELETE"])
+def delete_ticket(issue_key):
+    issue = jira.issue(issue_key)
+    issue.delete()
+
+    return f"Issue {issue_key} deleted successfully"
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
