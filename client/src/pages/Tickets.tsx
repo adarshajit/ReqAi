@@ -4,8 +4,10 @@ import { formatDate } from '../utils';
 import Spinner from '../components/Spinner';
 import { BsChatLeftFill, BsCalendar3 } from 'react-icons/bs';
 import { FiPaperclip } from 'react-icons/fi';
+import { DiagramFormData } from './CreateDiagram';
 
 type Ticket = {
+  key: string;
   issueType: string;
   summary: string;
   description: string;
@@ -25,15 +27,18 @@ type Attachment = {
   url: string;
 };
 
-const Tickets: FC = () => {
+const Tickets = ({
+  ticketId,
+  diagramType,
+  updateFields,
+}: {
+  ticketId: string | null;
+  diagramType: string;
+  updateFields: (fields: Partial<DiagramFormData>) => void;
+}) => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
-  const issueTypeLabel = (issueType: string) => {
-    if (issueType === 'Story')
-      return <div className="badge badge-success badge-outline">{issueType}</div>;
-    return <div className="badge badge-error badge-outline">{issueType}</div>;
-  };
+  const [selectedTicket, setSelectedTicket] = useState<string | null>(ticketId);
 
   useEffect(() => {
     const fetchTicketData = async () => {
@@ -51,12 +56,29 @@ const Tickets: FC = () => {
     fetchTicketData();
   }, []);
 
+  const issueTypeLabel = (issueType: string) => {
+    if (issueType === 'Story')
+      return <div className="badge badge-success badge-outline">{issueType}</div>;
+    return <div className="badge badge-error badge-outline">{issueType}</div>;
+  };
+
+  const handleTicketSelection = (ticketId: string) => {
+    setSelectedTicket(ticketId);
+    updateFields({ ticketId });
+  };
+
   if (loading) return <Spinner />;
 
   return (
     <div className="flex flex-col gap-4 max-w-2xl mt-24">
-      {tickets.map((ticket) => (
-        <div className="card bg-base-100 shadow-md">
+      {tickets.map((ticket: Ticket) => (
+        <div
+          className={`card border-2 border-grey-200 transition duration-300 ease-in-out cursor-pointer ${
+            ticket.key === selectedTicket ? 'border-black' : ''
+          }`}
+          key={ticket.key}
+          onClick={() => handleTicketSelection(ticket.key)}
+        >
           <div className="flex flex-col p-8 gap-4">
             {issueTypeLabel(ticket.issueType)}
             <h2 className="card-title">{ticket.summary}</h2>
