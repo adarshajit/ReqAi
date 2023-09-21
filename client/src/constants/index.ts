@@ -2,7 +2,7 @@ import upload from '../assets/upload.svg';
 import create from '../assets/create.svg';
 import diagram from '../assets/diagram.svg';
 
-export const homePageCardItems = [
+export const FEATURES = [
   {
     title: 'upload',
     image: {
@@ -29,5 +29,16 @@ export const homePageCardItems = [
     },
     description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, perferendis!',
     url: '/create/diagram',
+  },
+];
+
+export const DIAGRAMS = [
+  {
+    id: 1,
+    type: 'sequence',
+  },
+  {
+    id: 2,
+    type: 'flow',
   },
 ];
