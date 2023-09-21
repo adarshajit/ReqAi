@@ -29,7 +29,6 @@ type Attachment = {
 
 const Tickets = ({
   ticketId,
-  diagramType,
   updateFields,
 }: {
   ticketId: string | null;

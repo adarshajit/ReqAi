@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useMultiStepForm } from '../hooks/useMultiStepForm';
 import Tickets from './Tickets';
 import DiagramType from './DiagramType';
