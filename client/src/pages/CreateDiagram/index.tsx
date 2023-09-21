@@ -1,16 +1,12 @@
 import { useState } from 'react';
-import { useMultiStepForm } from '../hooks/useMultiStepForm';
+import { useMultiStepForm } from '../../hooks/useMultiStepForm';
 import Tickets from './Tickets';
 import DiagramType from './DiagramType';
+import { DiagramFormData } from '../../types';
 
 const INITIAL_FORM_DATA = {
   ticketId: '',
   diagramType: '',
-};
-
-export type DiagramFormData = {
-  ticketId: string;
-  diagramType: string;
 };
 
 const CreateDiagram = () => {

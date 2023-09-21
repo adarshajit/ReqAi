@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState, FC } from 'react';
-import { formatDate } from '../utils';
-import Spinner from '../components/Spinner';
 import { BsChatLeftFill, BsCalendar3 } from 'react-icons/bs';
 import { FiPaperclip } from 'react-icons/fi';
-import { DiagramFormData } from './CreateDiagram';
+import { formatDate } from '../../utils';
+import { DiagramFormData } from '../../types';
+import Spinner from '../../components/Spinner';
 
 type Ticket = {
   key: string;

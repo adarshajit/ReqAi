@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { DiagramFormData } from './CreateDiagram';
-import { DIAGRAMS } from '../constants';
+import { DIAGRAMS } from '../../constants';
+import { DiagramFormData } from '../../types';
 
 const DiagramType = ({
   diagramType,
