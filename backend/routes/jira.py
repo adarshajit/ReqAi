@@ -1,15 +1,9 @@
-from flask import Flask, jsonify, request, Blueprint
-from dotenv import load_dotenv
+from flask import jsonify, request, Blueprint
 from jira import JIRA
-from flask_cors import CORS
 from ..utils.extract_text_from_pdf import extract_text_from_pdf
 from ..utils.generate_diagram import generate_diagram
 from ..utils.serialize import serialize_attachment, serialize_comment
 import os
-
-load_dotenv()
-app = Flask(__name__)
-CORS(app)
 
 jiraApi = Blueprint('jiraApi', __name__)
 

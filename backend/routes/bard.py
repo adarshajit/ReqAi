@@ -1,13 +1,9 @@
-from flask import Flask, request, Blueprint
-from dotenv import load_dotenv
+from flask import request, Blueprint
 import requests
 import os
 import json
 import re
 from ..utils.extract_text_from_pdf import extract_text_from_pdf
-
-load_dotenv()
-app = Flask(__name__)
 
 palmApi = Blueprint('palmApi', __name__)
 

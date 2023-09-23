@@ -1,9 +1,11 @@
 from flask import Flask
 from flask_cors import CORS
+from dotenv import load_dotenv
 
 from .routes.jira import jiraApi
 from .routes.bard import palmApi
 
+load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
