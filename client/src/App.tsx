@@ -1,10 +1,11 @@
+import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Upload from './pages/Upload';
 import Home from './pages/Home';
+import Upload from './pages/Upload';
 import CreateDiagram from './pages/CreateDiagram';
 
-const App = () => {
+const App: FC = () => {
   return (
     <>
       <div className="flex flex-col w-full h-screen">

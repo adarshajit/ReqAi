@@ -1,4 +1,3 @@
-import React from 'react';
 import Theme from './Theme';
 import { Link } from 'react-router-dom';
 

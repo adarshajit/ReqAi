@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Spinner = () => {
   return (
     <div className="flex mt-48 justify-center items-center">

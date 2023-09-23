@@ -4,7 +4,7 @@ import diagram from '../assets/diagram.svg';
 
 export const FEATURES = [
   {
-    title: 'upload',
+    title: 'create ticket',
     image: {
       file: upload,
       size: 175,
@@ -32,7 +32,7 @@ export const FEATURES = [
   },
 ];
 
-export const DIAGRAMS = [
+export const DIAGRAM_TYPES = [
   {
     id: 1,
     type: 'sequence',
@@ -42,3 +42,8 @@ export const DIAGRAMS = [
     type: 'flow',
   },
 ];
+
+export const INITIAL_FORM_DATA = {
+  ticketId: '',
+  diagramType: '',
+};
