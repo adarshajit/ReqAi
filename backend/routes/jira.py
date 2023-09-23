@@ -1,15 +1,17 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Blueprint
 from dotenv import load_dotenv
 from jira import JIRA
 from flask_cors import CORS
-from .utils.extract_text_from_pdf import extract_text_from_pdf
-from .utils.generate_diagram import generate_diagram
-from .utils.serialize import serialize_attachment, serialize_comment
+from ..utils.extract_text_from_pdf import extract_text_from_pdf
+from ..utils.generate_diagram import generate_diagram
+from ..utils.serialize import serialize_attachment, serialize_comment
 import os
 
 load_dotenv()
 app = Flask(__name__)
 CORS(app)
+
+jiraApi = Blueprint('jiraApi', __name__)
 
 username = os.environ.get("EMAIL_ID")
 password = os.environ.get("API_TOKEN")
@@ -17,7 +19,7 @@ jira_instance = os.environ.get("JIRA_INSTANCE")
 
 jira = JIRA(jira_instance, basic_auth=(username, password))
 
-@app.route("/")
+@jiraApi.route("/")
 def hello_world():
     mermaid_code = """
 sequenceDiagram
@@ -27,7 +29,7 @@ sequenceDiagram
 """
     return generate_diagram(mermaid_code)
 
-@app.route("/tickets", methods = ["GET"])
+@jiraApi.route("/tickets", methods = ["GET"])
 def get_all_tickets():
     jql_query = 'project = SCRUM'
     issues = jira.search_issues(jql_query)
@@ -57,7 +59,7 @@ def get_all_tickets():
     
     return jsonify(tickets)
     
-@app.route("/ticket/<ticket_id>", methods = ["GET"])
+@jiraApi.route("/ticket/<ticket_id>", methods = ["GET"])
 def get_ticket(ticket_id):
     issue = jira.issue(str(ticket_id))
 
@@ -69,7 +71,7 @@ def get_ticket(ticket_id):
 
     return jsonify(ticket_details)
 
-@app.route("/ticket/create", methods = ["POST"])
+@jiraApi.route("/ticket/create", methods = ["POST"])
 def create_ticket():
 
     body = request.get_json()
@@ -85,7 +87,7 @@ def create_ticket():
 
     return f"New issue created with key: {new_issue.key}"
 
-@app.route("/ticket/update/<issue_key>", methods=["PUT"])
+@jiraApi.route("/ticket/update/<issue_key>", methods=["PUT"])
 def update_ticket(issue_key):
     body = request.get_json()
 
@@ -99,14 +101,14 @@ def update_ticket(issue_key):
 
     return f"Issue {issue_key} updated successfully"
 
-@app.route("/ticket/delete/<issue_key>", methods=["DELETE"])
+@jiraApi.route("/ticket/delete/<issue_key>", methods=["DELETE"])
 def delete_ticket(issue_key):
     issue = jira.issue(issue_key)
     issue.delete()
 
     return f"Issue {issue_key} deleted successfully"
 
-@app.route('/upload', methods=['POST'])
+@jiraApi.route('/upload', methods=['POST'])
 def upload_file():
     pdf_file = request.files['pdf_file']
     pdf_content = pdf_file.read()
