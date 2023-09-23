@@ -8,7 +8,7 @@ import os
 import json
 import re
 
-from utils.extract_text_from_pdf import extract_text_from_pdf
+from .utils.extract_text_from_pdf import extract_text_from_pdf
 from google.generativeai.client import get_default_text_client
 from google.generativeai.types import text_types
 from google.generativeai.types import model_types
