@@ -2,39 +2,11 @@ import axios from 'axios';
 import { useEffect, useState, FC } from 'react';
 import { BsChatLeftFill, BsCalendar3 } from 'react-icons/bs';
 import { FiPaperclip } from 'react-icons/fi';
-import { formatDate } from '../../utils';
-import { DiagramFormData } from '../../types';
+import { formatDate, issueTypeLabel } from '../../utils';
+import { Ticket, TicketsProps } from '../../types';
 import Spinner from '../../components/Spinner';
 
-type Ticket = {
-  key: string;
-  issueType: string;
-  summary: string;
-  description: string;
-  created: Date;
-  comments: Comment[];
-  attachments: Attachment[];
-};
-
-type Comment = {
-  author: string;
-  body: string;
-  created: Date;
-};
-
-type Attachment = {
-  filename: string;
-  url: string;
-};
-
-const Tickets = ({
-  ticketId,
-  updateFields,
-}: {
-  ticketId: string | null;
-  diagramType: string;
-  updateFields: (fields: Partial<DiagramFormData>) => void;
-}) => {
+const Tickets: FC<TicketsProps> = ({ ticketId, updateFields }) => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedTicket, setSelectedTicket] = useState<string | null>(ticketId);
@@ -55,13 +27,7 @@ const Tickets = ({
     fetchTicketData();
   }, []);
 
-  const issueTypeLabel = (issueType: string) => {
-    if (issueType === 'Story')
-      return <div className="badge badge-success badge-outline">{issueType}</div>;
-    return <div className="badge badge-error badge-outline">{issueType}</div>;
-  };
-
-  const handleTicketSelection = (ticketId: string) => {
+  const handleTicketSelection = (ticketId: string): void => {
     setSelectedTicket(ticketId);
     updateFields({ ticketId });
   };
@@ -72,10 +38,10 @@ const Tickets = ({
     <div className="flex flex-col gap-4 max-w-2xl mt-24">
       {tickets.map((ticket: Ticket) => (
         <div
+          key={ticket.key}
           className={`card border-2 border-grey-200 transition duration-300 ease-in-out cursor-pointer ${
             ticket.key === selectedTicket ? 'border-black' : ''
           }`}
-          key={ticket.key}
           onClick={() => handleTicketSelection(ticket.key)}
         >
           <div className="flex flex-col p-8 gap-4">

@@ -7,3 +7,9 @@ export const formatDate = (dateValue: string | number | Date): string => {
   };
   return date.toLocaleDateString('en-US', options);
 };
+
+export const issueTypeLabel = (issueType: string): JSX.Element => {
+  if (issueType === 'Story')
+    return <div className="badge badge-success badge-outline">{issueType}</div>;
+  return <div className="badge badge-error badge-outline">{issueType}</div>;
+};

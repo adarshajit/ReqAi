@@ -1,26 +1,21 @@
-import { useState } from 'react';
-import { DIAGRAMS } from '../../constants';
-import { DiagramFormData } from '../../types';
+import { useState, FC } from 'react';
+import { DIAGRAM_TYPES } from '../../constants';
+import { DiagramTypeProps } from '../../types';
 
-const DiagramType = ({
-  diagramType,
-  updateFields,
-}: {
-  diagramType: string;
-  updateFields: (fields: Partial<DiagramFormData>) => void;
-}) => {
+const DiagramType: FC<DiagramTypeProps> = ({ diagramType, updateFields }) => {
   const [selectedDiagramType, setSelectedDiagramType] = useState<string | null>(diagramType);
 
-  const handleDiagramTypeSelection = (diagramType: string) => {
+  const handleDiagramTypeSelection = (diagramType: string): void => {
     updateFields({ diagramType });
     setSelectedDiagramType(diagramType);
   };
 
   return (
     <div className="grid grid-cols-2 gap-2 mt-24 max-w-2xl">
-      {DIAGRAMS.map((diagram) => {
+      {DIAGRAM_TYPES.map((diagram) => {
         return (
           <div
+            key={diagram.id}
             className={`card w-80 border-2 border-grey-200 transition duration-300 ease-in-out cursor-pointer ${
               diagram.type === selectedDiagramType ? 'border-black' : ''
             }`}
