@@ -1,17 +1,26 @@
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
-import ArticleImage from '../assets/no_articles.svg';
+import { FEATURES } from '../constants';
 
-const Home = () => {
+const Home: FC = () => {
   return (
     <div className="hero min-h-screen">
-      <div className="hero-content text-center flex flex-col">
-        <img src={ArticleImage} width={200} />
-        <h1 className="text-3xl font-bold">Get started by creating your requirement</h1>
-        <div className="flex gap-4">
-          <button className="btn btn-primary">Create</button>
-          <Link to="/upload">
-            <button className="btn btn-primary">Upload</button>
-          </Link>
+      <div className="hero-content text-center flex flex-col gap-16">
+        <div className="flex gap-10">
+          {FEATURES.map((feature) => {
+            return (
+              <div
+                key={feature.title}
+                className="flex flex-col gap-6 w-64 justify-center items-center"
+              >
+                <img src={feature.image.file} width={feature.image.size} />
+                <p>{feature.description}</p>
+                <Link to={feature.url} className="w-full">
+                  <button className="btn btn-neutral w-full">{feature.title}</button>
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

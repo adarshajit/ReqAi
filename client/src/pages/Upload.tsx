@@ -44,9 +44,15 @@ const Upload: FC = () => {
         <div className="hero-content text-center flex flex-col">
           <img src={UploadImage} width={200} />
           <h1 className="text-3xl font-bold">Upload Business Requirement Document</h1>
-          <form onSubmit={handleSubmit}>
-            <input type="file" onChange={handleChange} name="pdf_file" required />
-            <button className="btn btn-primary" type="submit">
+          <form onSubmit={handleSubmit} className="flex gap-4">
+            <input
+              type="file"
+              onChange={handleChange}
+              name="pdf_file"
+              required
+              className="file-input file-input-bordered w-full max-w-xs"
+            />
+            <button className="btn btn-neutral" type="submit">
               Upload
             </button>
           </form>
