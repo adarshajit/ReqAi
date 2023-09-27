@@ -4,6 +4,7 @@ import Spinner from '../../components/Spinner';
 import Create from '../../assets/create.svg';
 import ReactMarkdown from 'react-markdown';
 import { PDFDownloadLink, Page, Text, Document, StyleSheet } from '@react-pdf/renderer';
+import { ToastContainer, toast } from 'react-toastify';
 
 const styles = StyleSheet.create({
   page: {
@@ -39,6 +40,7 @@ const CreateBRD: FC = () => {
       });
 
       setBRD(response.data);
+      toast.success('BRD Generated Successfully');
     } catch (error) {
       console.error('Error creating BRD:', error);
     } finally {
@@ -52,11 +54,20 @@ const CreateBRD: FC = () => {
     return (
       <>
         <div className="hero min-h-screen">
-          <div className="hero-content text-center flex flex-col">
-            <img src={Create} width={200} />
-            <h1 className="text-3xl font-bold">Upload Business Requirement Document</h1>
+          <div className="hero-content text-center flex flex-col gap-10">
+            <img src={Create} width={300} />
+            <h1 className="text-3xl font-bold">Enter your problem statement</h1>
             <form onSubmit={handleSubmit} className="flex gap-4">
-              <input type="text" onChange={handleChange} name="problemStatement" required />
+              <div className="form-control w-full max-w-xs">
+                <input
+                  type="text"
+                  placeholder="Type here"
+                  className="input input-bordered w-full max-w-xs"
+                  onChange={handleChange}
+                  name="problemStatement"
+                  required
+                />
+              </div>
               <button className="btn btn-neutral" type="submit">
                 Generate
               </button>
@@ -69,6 +80,7 @@ const CreateBRD: FC = () => {
   if (BRD)
     return (
       <div className="flex flex-col my-32 gap-20">
+        <ToastContainer />
         <div id="content-to-export">
           <ReactMarkdown children={BRD} className="prose lg:prose-xl" />
         </div>
