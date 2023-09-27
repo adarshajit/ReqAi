@@ -3,7 +3,8 @@ import requests
 import os
 import json
 import re
-from ..utils.extract_text_from_pdf import extract_text_from_pdf
+from .utils.extract_text_from_pdf import extract_text_from_pdf
+from jira import JIRA
 
 palmApi = Blueprint('palmApi', __name__)
 
@@ -43,6 +44,7 @@ Business Requirement Document:"""+ pdf_text}}
   else:
     return None
 
+
 @palmApi.route('/api/createBrd', methods=['POST'])
 def createBrd():
   body = request.get_json()
@@ -57,4 +59,36 @@ def createBrd():
   url += key
   response = requests.post(url, headers=headers, data=json.dumps(prompt_dict))
   return response.json()["candidates"][0]["output"]
+
+@palmApi.route('/api/createDiagram/<ticket_id>', methods=['POST'])
+def createDiagram():
+  """Hit the PaLM API and return the diagram."""
+  issue = jira.issue(str(ticket_id))
+  prompt_dict = {"prompt": {"text":"""For the following user story, please output mermaid.js code to create a sequence diagram. The code should follow the standard format expected by mermaid and should be as detailed as possible:"""+ issue.fields.description}}
+
+  headers =  {
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  }
+  
+
+  url_formation = os.environ.get("URL")
+  url = url_formation+":generateText?key="
+  url += key
+  response = requests.post(url, headers=headers, data=json.dumps(prompt_dict))
+
+  if response.status_code == 200:
+    json_output = response.json()["candidates"][0]["output"]
+    code = re.sub(r'^```\n', '', json_output)
+    code = re.sub(r'\n```$', '', json_output)
+    code = re.sub(r'```json','', json_output)
+    code = re.sub(r'`','',json_output)
+    
+    return code
+  else:
+    return None
+  
+if __name__ == '__main__':
+    app.run(debug=True)
+
 
