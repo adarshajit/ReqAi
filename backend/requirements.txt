@@ -11,3 +11,4 @@ google-generativeai.client==1.6.1
 google-generativeai.types.text_types==1.7.1
 google-generativeai.types.model_types==1.6.1
 google-generativeai.types.safety_types==1.6.1
+html2image==1.6.3
