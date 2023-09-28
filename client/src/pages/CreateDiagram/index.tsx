@@ -4,6 +4,8 @@ import { DiagramFormData } from '../../types';
 import { INITIAL_FORM_DATA } from '../../constants';
 import Tickets from './Tickets';
 import DiagramType from './DiagramType';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 
 const CreateDiagram: FC = () => {
   const [formData, setFormData] = useState<DiagramFormData>(INITIAL_FORM_DATA);
@@ -18,8 +20,13 @@ const CreateDiagram: FC = () => {
     });
   }
 
-  const handleSubmit = () => {
-    console.log(formData);
+  const handleSubmit = async () => {
+    try {
+      await axios.post(`http://localhost:5000/api/createDiagram`, formData);
+      toast.success('Diagram generated successfully');
+    } catch (err) {
+      toast.error('Uh Oh! There seem to be some issue.');
+    }
   };
 
   return (
@@ -46,6 +53,7 @@ const CreateDiagram: FC = () => {
         </button>
       </div>
       {step}
+      <ToastContainer />
     </div>
   );
 };
