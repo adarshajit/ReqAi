@@ -5,11 +5,14 @@ import { FiPaperclip } from 'react-icons/fi';
 import { formatDate, issueTypeLabel } from '../../utils';
 import { Ticket, TicketsProps } from '../../types';
 import Spinner from '../../components/Spinner';
+import TicketDetailsSidebar from '../TicketDetails';
 
 const Tickets: FC<TicketsProps> = ({ ticketId, updateFields }) => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedTicket, setSelectedTicket] = useState<string | null>(ticketId);
+  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(ticketId);
+  const [ticket, setTicket] = useState<Ticket | null>(null);
+  const [loading1, setLoading1] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchTicketData = async () => {
@@ -28,46 +31,71 @@ const Tickets: FC<TicketsProps> = ({ ticketId, updateFields }) => {
   }, []);
 
   const handleTicketSelection = (ticketId: string): void => {
-    setSelectedTicket(ticketId);
+    setSelectedTicketId(ticketId);
     updateFields({ ticketId });
+  };
+
+  const handleViewClick = async (ticketId: string | null): Promise<void> => {
+    try {
+      if (ticketId) {
+        setLoading1(true);
+        const res = await axios.get(`http://localhost:5000/ticket/${ticketId}`);
+        setTicket(res.data);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading1(false);
+    }
   };
 
   if (loading) return <Spinner />;
 
   return (
-    <div className="flex flex-col gap-4 max-w-2xl mt-24">
+    <div className="drawer drawer-end flex flex-col gap-4 max-w-2xl mt-24">
+      <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       {tickets.map((ticket: Ticket) => (
         <div
           key={ticket.key}
           className={`card border-2 border-grey-200 transition duration-300 ease-in-out cursor-pointer ${
-            ticket.key === selectedTicket ? 'border-black' : ''
+            ticket.key === selectedTicketId ? 'border-black' : ''
           }`}
           onClick={() => handleTicketSelection(ticket.key)}
         >
-          <div className="flex flex-col p-8 gap-4">
-            {issueTypeLabel(ticket.issueType)}
-            <h2 className="card-title">{ticket.summary}</h2>
-            <p>{ticket.description.substring(0, 200)}...</p>
-            <div className="flex justify-between">
-              <button className="btn">
-                <BsCalendar3 />
-                {formatDate(ticket.created)}
-              </button>
-              <div className="flex gap-2">
+          <div className="drawer-content">
+            <div className="flex flex-col p-8 gap-4">
+              {issueTypeLabel(ticket.issueType)}
+              <h2 className="card-title">{ticket.summary}</h2>
+              <p>{ticket.description.substring(0, 200)}...</p>
+              <div className="flex justify-between">
                 <button className="btn">
-                  <BsChatLeftFill />
-                  <span>{ticket.comments.length}</span>
+                  <BsCalendar3 />
+                  {formatDate(ticket.created)}
                 </button>
-                <button className="btn">
-                  <FiPaperclip />
-                  <span>{ticket.attachments.length}</span>
-                </button>
-                <button className="btn btn-neutral">View</button>
+                <div className="flex gap-2">
+                  <button className="btn">
+                    <BsChatLeftFill />
+                    <span>{ticket.comments.length}</span>
+                  </button>
+                  <button className="btn">
+                    <FiPaperclip />
+                    <span>{ticket.attachments.length}</span>
+                  </button>
+                  <label
+                    htmlFor="my-drawer"
+                    className="btn btn-neutral drawer-button"
+                    onClick={() => handleViewClick(ticket.key)}
+                  >
+                    View
+                  </label>
+                </div>
               </div>
             </div>
           </div>
         </div>
       ))}
+
+      <TicketDetailsSidebar ticket={ticket} isLoading={loading1}/>
     </div>
   );
 };
