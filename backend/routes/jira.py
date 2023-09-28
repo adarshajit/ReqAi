@@ -56,11 +56,23 @@ def get_all_tickets():
 def get_ticket(ticket_id):
     issue = jira.issue(str(ticket_id))
 
+    hasAttachments = len(issue.fields.attachment) > 0
+    hasComments = len(issue.fields.comment.comments) > 0
+    attachments = [serialize_attachment(attachment) for attachment in issue.fields.attachment]
+    comments = [serialize_comment(comment) for comment in issue.fields.comment.comments]
+
     ticket_details = {
-        "key": issue.key,
-        "summary": issue.fields.summary,
-        "description": issue.fields.description
-    }
+            "key": issue.key,
+            "summary": issue.fields.summary,
+            "description": issue.fields.description,
+            "issueType": issue.fields.issuetype.name,
+            "labels": issue.fields.labels,
+            "attachments": attachments,
+            "hasAttachments": hasAttachments,
+            "comments": comments,
+            "hasComments": hasComments,
+            "created": issue.fields.created,
+        }
 
     return jsonify(ticket_details)
 
