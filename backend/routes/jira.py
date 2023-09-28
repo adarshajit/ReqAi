@@ -3,6 +3,7 @@ from jira import JIRA
 from ..utils.generate_diagram import generate_diagram
 from ..utils.serialize import serialize_attachment, serialize_comment
 import os
+from html2image import Html2Image
 
 jiraApi = Blueprint('jiraApi', __name__)
 
@@ -112,3 +113,12 @@ def delete_ticket(issue_key):
     issue.delete()
 
     return f"Issue {issue_key} deleted successfully"
+
+@jiraApi.route('/upload', methods=['POST'])
+def upload_file():
+    pdf_file = request.files['pdf_file']
+    pdf_content = pdf_file.read()
+    pdf_text = extract_text_from_pdf(pdf_content)
+    
+    print(pdf_text)
+    return {"message": "File successfully uploaded", "data": pdf_text }
