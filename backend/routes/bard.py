@@ -4,7 +4,9 @@ import os
 import json
 import re
 from ..utils.extract_text_from_pdf import extract_text_from_pdf
+from ..utils.generate_diagram import generate_diagram
 from jira import JIRA
+from html2image import Html2Image
 
 palmApi = Blueprint('palmApi', __name__)
 
@@ -85,7 +87,27 @@ def createDiagram():
     code = re.sub(r'```json','', json_output)
     code = re.sub(r'`','',json_output)
     
+    attach_diagram(ticket_id, code)
+
     return code
   else:
     return None
   
+def attach_diagram(issue_key, diagram_code):
+
+    print(diagram_code)
+    html_content = generate_diagram(diagram_code)
+    print(html_content)
+    # TO DO - Move to a constants file
+    css = "body { background: white; margin: 3em} .mermaid { display: flex;justify-content: center;align-items: center; }" 
+    hti = Html2Image()
+    
+    file_name = issue_key + '.jpg'
+
+    # Convert HTML to an image using html2image
+    hti.screenshot(html_str=html_content, css_str=css, save_as= file_name)
+    
+    with open(file_name, "rb") as image_file:
+        jira.add_attachment(issue=issue_key, attachment= file_name)
+
+    return {"message": "Diagram successfully uploaded", "data": issue_key }
