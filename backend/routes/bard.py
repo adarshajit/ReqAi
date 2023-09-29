@@ -24,11 +24,15 @@ def createJira():
   pdf_file = request.files['pdf_file']
   pdf_content = pdf_file.read()
   pdf_text = extract_text_from_pdf(pdf_content)
-  prompt_dict = {"prompt": {"text":"""Break down the following Business Requirements Document into user stories in JSON format which JIRA rest APIs expect for story creation for given jira project key. Create separate jsons for each user story. Each json should include the following sections: 1. Summary: this should be a short heading for the story(this summary should be in plain english and SHOULD NOT be same as the user story or in user story format) 2. Description: This should include four sections, namely user story, Acceptance Criterea and Test Cases, Impact Analysis  4. KEY: This should be XXXX. Format should be like this {"summary": "", "description":{"User Story":"","Acceptance Criteria":["","",""],"Test Cases":["","",""], "Impact Analysis":{"positive":"","negative":""}},"key":""}. Output should be a string. Business Requirement Document:"""+ pdf_text}}
+  prompt_dict = {"prompt": {"text":"""Please analyze the provided business requirement document and generate an output string in the following format with "@#$" before each new user story - 
+  summary: ""; description: ""; test scenarios: ""; acceptance criteria: ""; impact analysis: "";
+  """+ pdf_text}}
+
   headers =  {
   "Content-Type": "application/json",
   "Accept": "application/json",
   }
+
   url = url_formation+":generateText?key="
   url += key
   response = requests.post(url, headers=headers, data=json.dumps(prompt_dict))
@@ -83,9 +87,10 @@ def createDiagram():
   if response.status_code == 200:
     json_output = response.json()["candidates"][0]["output"]
     code = re.sub(r'^```\n', '', json_output)
-    code = re.sub(r'\n```$', '', json_output)
-    code = re.sub(r'```json','', json_output)
-    code = re.sub(r'`','',json_output)
+    code = re.sub(r'\n```$', '', code)
+    code = re.sub(r'```json','', code)
+    code = re.sub(r'`','', code)
+    code = re.sub(r'^mermaid\s*', '', code)
     
     attach_diagram(ticket_id, code)
 
@@ -94,10 +99,8 @@ def createDiagram():
     return None
   
 def attach_diagram(issue_key, diagram_code):
-
-    print(diagram_code)
+    
     html_content = generate_diagram(diagram_code)
-    print(html_content)
     # TO DO - Move to a constants file
     css = "body { background: white; margin: 3em} .mermaid { display: flex;justify-content: center;align-items: center; }" 
     hti = Html2Image()
