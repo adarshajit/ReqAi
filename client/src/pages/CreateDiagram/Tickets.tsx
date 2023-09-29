@@ -9,10 +9,10 @@ import TicketDetailsSidebar from '../TicketDetails';
 
 const Tickets: FC<TicketsProps> = ({ ticketId, updateFields }) => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(ticketId);
   const [ticket, setTicket] = useState<Ticket | null>(null);
-  const [loading1, setLoading1] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showTicketData, setShowTicketData] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchTicketData = async () => {
@@ -38,14 +38,14 @@ const Tickets: FC<TicketsProps> = ({ ticketId, updateFields }) => {
   const handleViewClick = async (ticketId: string | null): Promise<void> => {
     try {
       if (ticketId) {
-        setLoading1(true);
+        setShowTicketData(true);
         const res = await axios.get(`http://localhost:5000/ticket/${ticketId}`);
         setTicket(res.data);
       }
     } catch (err) {
       console.log(err);
     } finally {
-      setLoading1(false);
+      setShowTicketData(false);
     }
   };
 
@@ -95,7 +95,7 @@ const Tickets: FC<TicketsProps> = ({ ticketId, updateFields }) => {
         </div>
       ))}
 
-      <TicketDetailsSidebar ticket={ticket} isLoading={loading1}/>
+      <TicketDetailsSidebar ticket={ticket} isLoading={showTicketData}/>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import Create from '../../assets/create.svg';
 import ReactMarkdown from 'react-markdown';
 import { PDFDownloadLink, Page, Text, Document, StyleSheet } from '@react-pdf/renderer';
 import { ToastContainer, toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const styles = StyleSheet.create({
   page: {
@@ -84,13 +85,18 @@ const CreateBRD: FC = () => {
         <div id="content-to-export">
           <ReactMarkdown children={BRD} className="prose lg:prose-xl" />
         </div>
-        <PDFDownloadLink
-          fileName="BRD.pdf"
-          document={<GeneratedBrdPDF BRD={BRD} />}
-          className="btn btn-neutral"
-        >
-          {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Export as PDF')}
-        </PDFDownloadLink>
+        <div className="flex flex-col gap-6">
+          <PDFDownloadLink
+            fileName="BRD.pdf"
+            document={<GeneratedBrdPDF BRD={BRD} />}
+            className="w-full btn btn-neutral"
+          >
+            {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Export as PDF')}
+          </PDFDownloadLink>
+          <Link to="/" className="w-full btn">
+            Return to home
+          </Link>
+        </div>
       </div>
     );
 };
