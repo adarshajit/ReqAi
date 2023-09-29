@@ -9,7 +9,7 @@ export const FEATURES = [
       file: upload,
       size: 175,
     },
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, perferendis!',
+    description: `Got a BRD? Let's slice 'n dice it into Jira stories!`,
     url: '/upload',
   },
   {
@@ -18,7 +18,7 @@ export const FEATURES = [
       file: create,
       size: 230,
     },
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, perferendis!',
+    description: `No BRD? No worries! We'll whip one up just for you!`,
     url: '/create/brd',
   },
   {
@@ -27,7 +27,7 @@ export const FEATURES = [
       file: diagram,
       size: 200,
     },
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, perferendis!',
+    description: `Fancy a diagram to go with that story? Consider it done!`,
     url: '/create/diagram',
   },
 ];
@@ -39,7 +39,19 @@ export const DIAGRAM_TYPES = [
   },
   {
     id: 2,
-    type: 'flow',
+    type: 'flowchart',
+  },
+  {
+    id: 3,
+    type: 'gantt',
+  },
+  {
+    id: 4,
+    type: 'class',
+  },
+  {
+    id: 5,
+    type: 'quadrant chart',
   },
 ];
 
