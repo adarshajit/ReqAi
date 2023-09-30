@@ -49,7 +49,10 @@ const CreateBRD: FC = () => {
     }
   };
 
-  if (loading) return <Spinner />;
+  if (loading)
+    return (
+      <Spinner message="Preparing your BRD, because turning ideas into words is our jam! 🚀" />
+    );
 
   if (BRD === '')
     return (

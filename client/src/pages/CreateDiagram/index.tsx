@@ -37,20 +37,21 @@ const CreateDiagram: FC = () => {
     }
   };
 
-  if (loading) return <Spinner />;
+  if (loading) return <Spinner message="Hold tight! Your diagram is being prepared. Don't worry, it's not a doodle!" />;
 
   if (showSuccessPage)
     return (
-      <>
-        <div className="hero min-h-screen">
-          <div className="hero-content text-center flex flex-col gap-16">
-            <img src={SuccessImage} width={300} />
-            <Link className="w-full btn btn-neutral" to="/">
-              Return to home
-            </Link>
-          </div>
+      <div className="text-center flex justify-center h-screen items-center flex-col gap-10">
+        <img src={SuccessImage} width={270} />
+        <div className="flex flex-col gap-6">
+          <p className="text-xl font-bold max-w-md">
+            Woohoo! Diagram attached successfully to Ticket: {formData.ticketId}
+          </p>
+          <Link className="w-full btn btn-neutral" to="/">
+            Return to home
+          </Link>
         </div>
-      </>
+      </div>
     );
 
   if (!showSuccessPage)

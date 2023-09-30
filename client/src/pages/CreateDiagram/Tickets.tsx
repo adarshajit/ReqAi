@@ -49,10 +49,10 @@ const Tickets: FC<TicketsProps> = ({ ticketId, updateFields }) => {
     }
   };
 
-  if (loading) return <Spinner />;
+  if (loading) return <Spinner message={`Hold on! We're fetching your tickets..`} />;
 
   return (
-    <div className="drawer drawer-end flex flex-col gap-4 max-w-2xl mt-24">
+    <div className="drawer drawer-end flex flex-col gap-4 max-w-2xl my-24">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       {tickets.map((ticket: Ticket) => (
         <div
@@ -95,7 +95,7 @@ const Tickets: FC<TicketsProps> = ({ ticketId, updateFields }) => {
         </div>
       ))}
 
-      <TicketDetailsSidebar ticket={ticket} isLoading={showTicketData}/>
+      <TicketDetailsSidebar ticket={ticket} isLoading={showTicketData} />
     </div>
   );
 };

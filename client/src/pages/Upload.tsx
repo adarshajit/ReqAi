@@ -43,7 +43,8 @@ const Upload: FC = () => {
     }
   };
 
-  if (loading) return <Spinner />;
+  if (loading)
+    return <Spinner message="Crafting user stories with the finesse of a master chef ✍️" />;
 
   if (!userStories)
     return (
