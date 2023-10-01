@@ -54,7 +54,7 @@ const CreateBRD: FC = () => {
       <Spinner message="Preparing your BRD, because turning ideas into words is our jam! 🚀" />
     );
 
-  if (BRD === '')
+  if (!BRD)
     return (
       <>
         <div className="hero min-h-screen">
@@ -69,6 +69,7 @@ const CreateBRD: FC = () => {
                   className="input input-bordered w-full max-w-xs"
                   onChange={handleChange}
                   name="problemStatement"
+                  autoComplete="off"
                   required
                 />
               </div>
