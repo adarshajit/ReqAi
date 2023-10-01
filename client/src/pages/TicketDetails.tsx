@@ -30,10 +30,13 @@ const TicketDetails = ({ ticket }: { ticket: Ticket | null }) => {
           <p>{ticket.key}</p>
           {issueTypeLabel(ticket.issueType)}
         </div>
-        <h2 className="card-title">{ticket.summary}</h2>
+        <h2 className="text-3xl font-bold">{ticket.summary}</h2>
         <p>{formatDate(ticket.created)}</p>
-        <p>{ticket.description}</p>
-
+        {ticket.description.split('\n\n').map((item, id) => (
+          <li className="text-base" key={id}>
+            {item}
+          </li>
+        ))}
         <hr className="border" />
         <h3 className="text-lg font-bold">Comments</h3>
         {ticket.comments.length ? (
