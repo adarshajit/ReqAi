@@ -1,17 +1,19 @@
-import { useState, FC, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
-import Spinner from '../components/Spinner';
-import UploadImage from '../assets/upload.svg';
-import { convertStringToJSON, issueTypeLabel } from '../utils';
+import { useState, FC, ChangeEvent, FormEvent } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import { convertStringToJSON, issueTypeLabel } from '../utils';
 import { Ticket } from '../types';
+import Spinner from '../components/Spinner';
 import GeneratedTicketDetails from './GeneratedTicketDetails';
+import Success from './Success';
+import UploadImage from '../assets/upload.svg';
 
 const Upload: FC = () => {
   const [file, setFile] = useState<File | string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [userStories, setUserStories] = useState<any>(null);
   const [ticket, setTicket] = useState<Ticket | null>(null);
+  const [isCreationSuccess, isSetCreationSuccess] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
@@ -70,18 +72,29 @@ const Upload: FC = () => {
 
   const handleUserStoryCreation = async (): Promise<void> => {
     const selectedUserStories = userStories.filter((userStory: any) => userStory.selected);
-
     try {
+      setLoading(true);
+      isSetCreationSuccess(true);
       axios.post('http://localhost:5000/ticket/create/bulk', selectedUserStories);
       toast.success('The selected user stories is now available on JIRA!');
     } catch (err) {
       toast.error('Uh oh! Unable to create the selected user stories');
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   if (loading)
-    return <Spinner message="Crafting user stories with the finesse of a master chef ✍️" />;
+    return (
+      <Spinner
+        message={
+          isCreationSuccess
+            ? 'Hold tight. Your tickets are getting created in JIRA 🚧'
+            : 'Crafting user stories with the finesse of a masterchef ✍️'
+        }
+      />
+    );
 
   if (!userStories)
     return (
@@ -107,7 +120,9 @@ const Upload: FC = () => {
       </>
     );
 
-  if (userStories)
+  if (isCreationSuccess) return <Success message="Yay! Your tickets are now available on JIRA." />;
+
+  if (userStories && !isCreationSuccess)
     return (
       <div className="flex flex-col gap-10 max-w-3xl my-24 justify-center items-center">
         <h1 className="text-3xl font-bold leading-10 mt-12">

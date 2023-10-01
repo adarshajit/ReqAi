@@ -5,9 +5,8 @@ import { INITIAL_FORM_DATA } from '../../constants';
 import Tickets from './Tickets';
 import DiagramType from './DiagramType';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import SuccessImage from '../../assets/success.svg';
 import Spinner from '../../components/Spinner';
+import Success from '../Success';
 
 const CreateDiagram: FC = () => {
   const [formData, setFormData] = useState<DiagramFormData>(INITIAL_FORM_DATA);
@@ -37,21 +36,14 @@ const CreateDiagram: FC = () => {
     }
   };
 
-  if (loading) return <Spinner message="Hold tight! Your diagram is being prepared. Don't worry, it's not a doodle!" />;
+  if (loading)
+    return (
+      <Spinner message="Hold tight! Your diagram is being prepared. Don't worry, it's not a doodle! 🎨" />
+    );
 
   if (showSuccessPage)
     return (
-      <div className="text-center flex justify-center h-screen items-center flex-col gap-10">
-        <img src={SuccessImage} width={270} />
-        <div className="flex flex-col gap-6">
-          <p className="text-xl font-bold max-w-md">
-            Woohoo! Diagram attached successfully to Ticket: {formData.ticketId}
-          </p>
-          <Link className="w-full btn btn-neutral" to="/">
-            Return to home
-          </Link>
-        </div>
-      </div>
+      <Success message={`Woohoo! Diagram attached successfully to Ticket: ${formData.ticketId}`} />
     );
 
   if (!showSuccessPage)
