@@ -50,7 +50,10 @@ const Tickets = () => {
       </div>
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       {tickets.map((ticket: Ticket) => (
-        <Ticket ticket={ticket} handleViewClick={handleViewClick} />
+        <>
+          <Ticket ticket={ticket} handleViewClick={handleViewClick} />
+          <hr />
+        </>
       ))}
       <JiraTicketDetailsSidebar ticket={ticket} isLoading={showTicketData} />
     </div>
