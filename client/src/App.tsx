@@ -6,6 +6,7 @@ import Upload from './pages/Upload';
 import CreateDiagram from './pages/CreateDiagram';
 import CreateBRD from './pages/CreateBRD';
 import UpgradeToPro from './pages/UpgradeToPro';
+import Tickets from './pages/Tickets';
 
 const App: FC = () => {
   return (
@@ -18,6 +19,7 @@ const App: FC = () => {
             <Route path="/upload" element={<Upload />} />
             <Route path="/create/diagram" element={<CreateDiagram />} />
             <Route path="/create/brd" element={<CreateBRD />} />
+            <Route path="/tickets" element={<Tickets />} />
             <Route path="/reqAi/pro" element={<UpgradeToPro />} />
           </Routes>
         </div>
