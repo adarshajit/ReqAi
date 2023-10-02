@@ -44,6 +44,10 @@ const Tickets = () => {
 
   return (
     <div className="drawer drawer-end flex flex-col gap-4 max-w-2xl my-24">
+      <div className="my-14 pl-6 font-bold flex flex-col gap-4">
+        <h1 className="text-5xl font-bold">Tickets</h1>
+        <p className="text-gray-500">All your tickets in JIRA</p>
+      </div>
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       {tickets.map((ticket: Ticket) => (
         <Ticket ticket={ticket} handleViewClick={handleViewClick} />
