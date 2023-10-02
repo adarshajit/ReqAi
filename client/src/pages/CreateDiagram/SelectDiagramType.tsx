@@ -2,7 +2,7 @@ import { useState, FC } from 'react';
 import { DIAGRAM_TYPES } from '../../constants';
 import { DiagramTypeProps } from '../../types';
 
-const DiagramType: FC<DiagramTypeProps> = ({ diagramType, updateFields }) => {
+const SelectDiagramType: FC<DiagramTypeProps> = ({ diagramType, updateFields }) => {
   const [selectedDiagramType, setSelectedDiagramType] = useState<string | null>(diagramType);
 
   const handleDiagramTypeSelection = (diagramType: string): void => {
@@ -31,4 +31,4 @@ const DiagramType: FC<DiagramTypeProps> = ({ diagramType, updateFields }) => {
   );
 };
 
-export default DiagramType;
+export default SelectDiagramType;

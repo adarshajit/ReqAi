@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { convertStringToJSON, issueTypeLabel } from '../utils';
 import { Ticket } from '../types';
 import Spinner from '../components/Spinner';
-import GeneratedTicketDetails from './GeneratedTicketDetails';
+import BardGeneratedTicketDetailsSidebar from '../components/Sidebar/BardGeneratedTicketDetailsSidebar';
 import Success from './Success';
 import UploadImage from '../assets/upload.svg';
 
@@ -13,7 +13,7 @@ const Upload: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [userStories, setUserStories] = useState<any>(null);
   const [ticket, setTicket] = useState<Ticket | null>(null);
-  const [isCreationSuccess, isSetCreationSuccess] = useState(false);
+  const [isCreationSuccess, isSetCreationSuccess] = useState<boolean>(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
@@ -163,7 +163,7 @@ const Upload: FC = () => {
               </div>
             </div>
           ))}
-          <GeneratedTicketDetails ticket={ticket} />
+          <BardGeneratedTicketDetailsSidebar ticket={ticket} />
         </div>
         <ToastContainer />
       </div>

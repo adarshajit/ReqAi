@@ -1,11 +1,10 @@
-import { Ticket } from '../types';
-import Spinner from '../components/Spinner';
-import { formatDate, issueTypeLabel } from '../utils';
-import { BsChatLeftFill } from 'react-icons/bs';
 import { FiPaperclip } from 'react-icons/fi';
-import { Comment } from '../types';
+import { Ticket, Comment } from '../../types';
+import { formatDate, issueTypeLabel } from '../../utils';
+import Spinner from '../Spinner';
+import { BsChatLeftFill } from 'react-icons/bs';
 
-const TicketDetailsSidebar = ({
+const JiraTicketDetailsSidebar = ({
   ticket,
   isLoading,
 }: {
@@ -65,4 +64,4 @@ const TicketDetails = ({ ticket }: { ticket: Ticket | null }) => {
     );
 };
 
-export default TicketDetailsSidebar;
+export default JiraTicketDetailsSidebar;

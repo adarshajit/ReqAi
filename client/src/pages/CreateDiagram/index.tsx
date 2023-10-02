@@ -2,8 +2,8 @@ import { FC, useState } from 'react';
 import { useMultiStepForm } from '../../hooks/useMultiStepForm';
 import { DiagramFormData } from '../../types';
 import { INITIAL_FORM_DATA } from '../../constants';
-import Tickets from './Tickets';
-import DiagramType from './DiagramType';
+import SelectTicket from './SelectTicket';
+import SelectDiagramType from './SelectDiagramType';
 import axios from 'axios';
 import Spinner from '../../components/Spinner';
 import Success from '../Success';
@@ -14,8 +14,8 @@ const CreateDiagram: FC = () => {
   const [loading, setLoading] = useState(false);
 
   const { currentStepIndex, step, next, back } = useMultiStepForm([
-    <Tickets {...formData} updateFields={updateFields} />,
-    <DiagramType {...formData} updateFields={updateFields} />,
+    <SelectTicket {...formData} updateFields={updateFields} />,
+    <SelectDiagramType {...formData} updateFields={updateFields} />,
   ]);
 
   function updateFields(fieldsToUpdate: Partial<DiagramFormData>) {

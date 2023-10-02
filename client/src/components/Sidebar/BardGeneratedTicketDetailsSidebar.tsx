@@ -1,4 +1,4 @@
-const GeneratedTicketDetails = ({ ticket }: { ticket: any | null }) => {
+const BardGeneratedTicketDetailsSidebar = ({ ticket }: { ticket: any | null }) => {
   if (ticket)
     return (
       <div className="drawer-side">
@@ -12,7 +12,7 @@ const GeneratedTicketDetails = ({ ticket }: { ticket: any | null }) => {
 
             <h3 className="text-lg font-bold">Acceptance Criteria</h3>
             {ticket.acceptanceCriteria.length ? (
-              ticket.acceptanceCriteria.map((item: any, id: number) => {
+              ticket.acceptanceCriteria.map((item: string, id: number) => {
                 return (
                   <ul key={id}>
                     <li>{item}</li>
@@ -25,7 +25,7 @@ const GeneratedTicketDetails = ({ ticket }: { ticket: any | null }) => {
 
             <h3 className="text-lg font-bold">Test Scenarios</h3>
             {ticket.testScenarios.length ? (
-              ticket.testScenarios.map((item: any, id: number) => {
+              ticket.testScenarios.map((item: string, id: number) => {
                 return (
                   <ul key={id}>
                     <li>{item}</li>
@@ -38,7 +38,7 @@ const GeneratedTicketDetails = ({ ticket }: { ticket: any | null }) => {
 
             <h3 className="text-lg font-bold">Impact Analysis</h3>
             {ticket.impactAnalysis.length ? (
-              ticket.impactAnalysis.map((item: any, id: number) => {
+              ticket.impactAnalysis.map((item: string, id: number) => {
                 return (
                   <ul key={id}>
                     <li>{item}</li>
@@ -54,4 +54,4 @@ const GeneratedTicketDetails = ({ ticket }: { ticket: any | null }) => {
     );
 };
 
-export default GeneratedTicketDetails;
+export default BardGeneratedTicketDetailsSidebar;
