@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import Upload from './pages/Upload';
+import Upload from './pages/CreateTickets/Upload';
 import CreateDiagram from './pages/CreateDiagram';
 import CreateBRD from './pages/CreateBRD';
 import UpgradeToPro from './pages/UpgradeToPro';

@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { useState, FC, ChangeEvent, FormEvent } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import { convertStringToJSON, issueTypeLabel } from '../utils';
-import { Ticket } from '../types';
-import Spinner from '../components/Spinner';
-import BardGeneratedTicketDetailsSidebar from '../components/Sidebar/BardGeneratedTicketDetailsSidebar';
-import Success from './Success';
-import UploadImage from '../assets/upload.svg';
+import { convertStringToJSON, issueTypeLabel } from '../../utils';
+import { Ticket } from '../../types';
+import Spinner from '../../components/Spinner';
+import BardGeneratedTicketDetailsSidebar from '../../components/Sidebar/BardGeneratedTicketDetailsSidebar';
+import Success from '../../components/Success';
+import UploadImage from '../../assets/upload.svg';
 
 const Upload: FC = () => {
   const [file, setFile] = useState<File | string>('');

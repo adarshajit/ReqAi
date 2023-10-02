@@ -6,7 +6,7 @@ import SelectTicket from './SelectTicket';
 import SelectDiagramType from './SelectDiagramType';
 import axios from 'axios';
 import Spinner from '../../components/Spinner';
-import Success from '../Success';
+import Success from '../../components/Success';
 
 const CreateDiagram: FC = () => {
   const [formData, setFormData] = useState<DiagramFormData>(INITIAL_FORM_DATA);
