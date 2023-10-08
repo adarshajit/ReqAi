@@ -66,6 +66,7 @@ export const convertStringToJSON = (inputText: string | null) => {
         testScenarios,
         acceptanceCriteria,
         impactAnalysis,
+        selected: false,
       });
     }
 

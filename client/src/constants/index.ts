@@ -55,6 +55,45 @@ export const DIAGRAM_TYPES = [
   },
 ];
 
+export const PRICING_PLANS = [
+  {
+    id: 1,
+    title: 'Free',
+    price: '0',
+    duration: 'Lifetime',
+    features: [
+      'Access to all basic features',
+      'Create up to 100 user stories',
+      'Generate up to 5 BRD',
+      'Create up to 20 diagrams',
+    ],
+  },
+  {
+    id: 2,
+    title: 'Business',
+    price: '20',
+    duration: 'Lifetime',
+    features: [
+      'Access to all basic features',
+      'Create up to 100 user stories',
+      'Generate up to 5 BRD',
+      'Create up to 20 diagrams',
+    ],
+  },
+  {
+    id: 3,
+    title: 'Enterprise',
+    price: '40',
+    duration: 'Lifetime',
+    features: [
+      'Access to all basic features',
+      'Create up to 100 user stories',
+      'Generate up to 5 BRD',
+      'Create up to 20 diagrams',
+    ],
+  },
+];
+
 export const INITIAL_FORM_DATA = {
   ticketId: '',
   diagramType: '',

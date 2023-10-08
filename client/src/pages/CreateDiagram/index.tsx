@@ -2,12 +2,11 @@ import { FC, useState } from 'react';
 import { useMultiStepForm } from '../../hooks/useMultiStepForm';
 import { DiagramFormData } from '../../types';
 import { INITIAL_FORM_DATA } from '../../constants';
-import Tickets from './Tickets';
-import DiagramType from './DiagramType';
+import SelectTicket from './SelectTicket';
+import SelectDiagramType from './SelectDiagramType';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import SuccessImage from '../../assets/success.svg';
 import Spinner from '../../components/Spinner';
+import Success from '../../components/Success';
 
 const CreateDiagram: FC = () => {
   const [formData, setFormData] = useState<DiagramFormData>(INITIAL_FORM_DATA);
@@ -15,8 +14,8 @@ const CreateDiagram: FC = () => {
   const [loading, setLoading] = useState(false);
 
   const { currentStepIndex, step, next, back } = useMultiStepForm([
-    <Tickets {...formData} updateFields={updateFields} />,
-    <DiagramType {...formData} updateFields={updateFields} />,
+    <SelectTicket {...formData} updateFields={updateFields} />,
+    <SelectDiagramType {...formData} updateFields={updateFields} />,
   ]);
 
   function updateFields(fieldsToUpdate: Partial<DiagramFormData>) {
@@ -37,20 +36,14 @@ const CreateDiagram: FC = () => {
     }
   };
 
-  if (loading) return <Spinner />;
+  if (loading)
+    return (
+      <Spinner message="Hold tight! Your diagram is being prepared. Don't worry, it's not a doodle! 🎨" />
+    );
 
   if (showSuccessPage)
     return (
-      <>
-        <div className="hero min-h-screen">
-          <div className="hero-content text-center flex flex-col gap-16">
-            <img src={SuccessImage} width={300} />
-            <Link className="w-full btn btn-neutral" to="/">
-              Return to home
-            </Link>
-          </div>
-        </div>
-      </>
+      <Success message={`Woohoo! Diagram attached successfully to Ticket: ${formData.ticketId}`} />
     );
 
   if (!showSuccessPage)

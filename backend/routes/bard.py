@@ -10,8 +10,9 @@ from html2image import Html2Image
 
 palmApi = Blueprint('palmApi', __name__)
 
-key = os.environ.get("PALM_API_KEY")
-url_formation = os.environ.get("URL")
+PALM_API_KEY = os.environ.get("PALM_API_KEY")
+PALM_API_BASE_URL = os.environ.get("PALM_API_BASE_URL")
+PALM_API_URL = f'{PALM_API_BASE_URL}:generateText?key={PALM_API_KEY}'
 
 username = os.environ.get("EMAIL_ID")
 password = os.environ.get("API_TOKEN")
@@ -24,6 +25,7 @@ def createJira():
   pdf_file = request.files['pdf_file']
   pdf_content = pdf_file.read()
   pdf_text = extract_text_from_pdf(pdf_content)
+  
   prompt_dict = {"prompt": {"text":"""Please analyze the provided business requirement document and generate an output string in the following format with "@#$" before each new user story - 
   summary: ""; description: ""; test scenarios: ""; acceptance criteria: ""; impact analysis: "";
   """+ pdf_text}}
@@ -33,9 +35,7 @@ def createJira():
   "Accept": "application/json",
   }
 
-  url = url_formation+":generateText?key="
-  url += key
-  response = requests.post(url, headers=headers, data=json.dumps(prompt_dict))
+  response = requests.post(PALM_API_URL, headers=headers, data=json.dumps(prompt_dict))
 
   if response.status_code == 200:
     json_output = response.json()["candidates"][0]["output"]
@@ -55,13 +55,13 @@ def createBrd():
   problem_statement = body.get('problemStatement')
 
   prompt_dict = {"prompt": {"text": "Assume you are a Business Analyst. Create a Business Requirement Document(BRD) for the problem statement –" + problem_statement + "The BRD should be as detailed as possible and include descriptions of UI elements and flow, dependencies, assumptions, risks etc. This should be in markdown syntax"}}
+
   headers =  {
   "Content-Type": "application/json",
   "Accept": "application/json",
   }
-  url = url_formation+":generateText?key="
-  url += key
-  response = requests.post(url, headers=headers, data=json.dumps(prompt_dict))
+
+  response = requests.post(PALM_API_URL, headers=headers, data=json.dumps(prompt_dict))
   return response.json()["candidates"][0]["output"]
 
 @palmApi.route('/api/createDiagram', methods=['POST'])
@@ -79,10 +79,7 @@ def createDiagram():
   "Accept": "application/json",
   }
   
-  url_formation = os.environ.get("URL")
-  url = url_formation+":generateText?key="
-  url += key
-  response = requests.post(url, headers=headers, data=json.dumps(prompt_dict))
+  response = requests.post(PALM_API_URL, headers=headers, data=json.dumps(prompt_dict))
 
   if response.status_code == 200:
     json_output = response.json()["candidates"][0]["output"]

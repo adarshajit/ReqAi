@@ -1,9 +1,9 @@
 from flask import jsonify, request, Blueprint
 from jira import JIRA
-from ..utils.generate_diagram import generate_diagram
-from ..utils.serialize import serialize_attachment, serialize_comment
+from ..utils.serialize import serialize_attachment, serialize_comment, convert_property_value_to_string
 import os
-from html2image import Html2Image
+import jinja2
+from ..constant import DESCRIPTION_TEMPLATE
 
 jiraApi = Blueprint('jiraApi', __name__)
 
@@ -12,16 +12,6 @@ password = os.environ.get("API_TOKEN")
 jira_instance = os.environ.get("JIRA_INSTANCE")
 
 jira = JIRA(jira_instance, basic_auth=(username, password))
-
-@jiraApi.route("/")
-def hello_world():
-    mermaid_code = """
-sequenceDiagram
-    Alice->>John: Hello John, how are you?
-    John-->>Alice: Great!
-    Alice-)John: See you later!
-"""
-    return generate_diagram(mermaid_code)
 
 @jiraApi.route("/tickets", methods = ["GET"])
 def get_all_tickets():
@@ -93,6 +83,34 @@ def create_ticket():
 
     return f"New issue created with key: {new_issue.key}"
 
+@jiraApi.route("/ticket/create/bulk", methods = ["POST"])
+def create_bulk_tickets():
+    user_stories = request.get_json()
+
+    issue_list = []
+
+    for user_story in user_stories:
+        summary = convert_property_value_to_string(user_story, "summary")
+        description = convert_property_value_to_string(user_story, "description")
+        acceptance_criteria = convert_property_value_to_string(user_story, "acceptanceCriteria")
+        test_scenarios = convert_property_value_to_string(user_story, "testScenarios")
+        impact_analysis = convert_property_value_to_string(user_story, "impactAnalysis")
+
+        formatted_description = jinja2.Template(DESCRIPTION_TEMPLATE).render(description=description, acceptance_criteria=acceptance_criteria, test_scenarios=test_scenarios, impact_analysis=impact_analysis)
+
+        ticket_data = {
+            'project': 'SCRUM',
+            'summary': summary,
+            'description': formatted_description,
+            'issuetype': {'name': 'Story'},
+        }
+
+        issue_list.append(ticket_data)
+
+    jira.create_issues(field_list=issue_list)
+
+    return "Tickets have been successfully created in bulk."
+
 @jiraApi.route("/ticket/update/<issue_key>", methods=["PUT"])
 def update_ticket(issue_key):
     body = request.get_json()
@@ -113,12 +131,3 @@ def delete_ticket(issue_key):
     issue.delete()
 
     return f"Issue {issue_key} deleted successfully"
-
-@jiraApi.route('/upload', methods=['POST'])
-def upload_file():
-    pdf_file = request.files['pdf_file']
-    pdf_content = pdf_file.read()
-    pdf_text = extract_text_from_pdf(pdf_content)
-    
-    print(pdf_text)
-    return {"message": "File successfully uploaded", "data": pdf_text }
