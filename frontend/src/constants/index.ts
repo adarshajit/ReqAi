@@ -72,12 +72,12 @@ export const PRICING_PLANS = [
     id: 2,
     title: 'Business',
     price: '20',
-    duration: 'Lifetime',
+    duration: '1 Year',
     features: [
       'Access to all basic features',
-      'Create up to 100 user stories',
-      'Generate up to 5 BRD',
-      'Create up to 20 diagrams',
+      'Create up to 1000 user stories',
+      'Generate up to 50 BRD',
+      'Create up to 200 diagrams',
     ],
   },
   {
@@ -87,9 +87,10 @@ export const PRICING_PLANS = [
     duration: 'Lifetime',
     features: [
       'Access to all basic features',
-      'Create up to 100 user stories',
-      'Generate up to 5 BRD',
-      'Create up to 20 diagrams',
+      'Unlimited user stories',
+      'Unlimted BRDs and diagrams',
+      'Early Access: Sample code creation',
+      'Early Access: User guides creation',
     ],
   },
 ];
