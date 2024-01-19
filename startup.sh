@@ -9,7 +9,7 @@ pip install -r requirements.txt
 flask --app app run --debug &
 
 # Navigate to the client folder
-cd ../client
+cd ../frontend
 
 npm i
 
