@@ -26,7 +26,7 @@ def createJira():
   pdf_content = pdf_file.read()
   pdf_text = extract_text_from_pdf(pdf_content)
   
-  prompt_dict = {"prompt": {"text":"""Please analyze the provided business requirement document and generate an output string in the following format with "@#$" before each new user story - 
+  prompt_dict = {"prompt": {"text":"""Please analyze the provided business requirement document and generate user stories for each small feature. Break down the BRD to separate user stories which should have minimal effort. Create as many user stories as possible with acceptance criteria and test scenarios. For the acceptance criteria, add scenarios which account for the edge cases. Generate an output string in the following format with "@#$" before each new user story - 
   summary: ""; description: ""; test scenarios: ""; acceptance criteria: ""; impact analysis: "";
   """+ pdf_text}}
 
